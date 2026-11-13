@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Colorado Front Range municipal planning career index built from recent job postings.">
+  <title>Colorado Municipal Planning Career Index</title>
+  <style>
+    :root {
+      --ink: #173042;
+      --muted: #5b6d78;
+      --paper: #f5f1e8;
+      --surface: #fffdf8;
+      --blue: #176b87;
+      --blue-dark: #0d4f69;
+      --blue-soft: #dceef2;
+      --green: #36725d;
+      --green-soft: #e2efe9;
+      --gold: #d99435;
+      --gold-soft: #faecd3;
+      --red: #9b4d45;
+      --line: #d7ddd9;
+      --shadow: 0 12px 32px rgba(21, 48, 64, .09);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 3%, rgba(217,148,53,.16), transparent 24rem),
+        linear-gradient(180deg, #edf5f5 0, var(--paper) 34rem, var(--paper) 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: var(--blue-dark); }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -5rem;
+      padding: .7rem 1rem;
+      border-radius: 8px;
+      background: #fff;
+      z-index: 20;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      font-size: .88rem;
+      color: var(--muted);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      color: var(--ink);
+      font-weight: 780;
+      letter-spacing: -.01em;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue-dark);
+      border-radius: 10px 10px 10px 2px;
+      font-size: .78rem;
+      box-shadow: 0 5px 12px rgba(13,79,105,.22);
+    }
+    .toplinks { display: flex; gap: 1rem; }
+    .toplinks a { color: var(--muted); text-decoration: none; }
+    .toplinks a:hover { color: var(--ink); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 2.3rem;
+      align-items: end;
+      padding: 4.6rem 0 4rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin: 0 0 .9rem;
+      color: var(--blue-dark);
+      font-size: .78rem;
+      font-weight: 820;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 23px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--gold);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 830px;
+      margin-bottom: 1.1rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 7vw, 6.2rem);
+      line-height: .94;
+      letter-spacing: -.055em;
+      font-weight: 650;
+    }
+    .hero-copy {
+      max-width: 760px;
+      margin-bottom: 1.25rem;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: #3e5664;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .45rem .72rem;
+      border: 1px solid rgba(23,107,135,.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      color: var(--blue-dark);
+      font-size: .8rem;
+      font-weight: 720;
+    }
+    .hero-stat {
+      padding: 1.55rem;
+      border: 1px solid rgba(23,107,135,.18);
+      border-radius: 30px 30px 30px 8px;
+      background: rgba(255,253,248,.76);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .hero-stat strong {
+      display: block;
+      margin-bottom: .15rem;
+      color: var(--blue-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 3.2rem;
+      line-height: 1;
+    }
+    .hero-stat span { display: block; color: var(--muted); }
+    .hero-stat hr { border: 0; border-top: 1px solid var(--line); margin: 1.2rem 0; }
+    .hero-stat .small { font-size: .84rem; }
+
+    .section { padding: 4.5rem 0; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      align-items: end;
+      margin-bottom: 1.65rem;
+    }
+    .section-head h2 {
+      margin-bottom: .45rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      font-weight: 650;
+    }
+    .section-head p { max-width: 680px; margin-bottom: 0; color: var(--muted); }
+
+    .takeaways {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .takeaway {
+      min-height: 180px;
+      padding: 1.45rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 7px 20px rgba(21,48,64,.045);
+    }
+    .takeaway b {
+      display: block;
+      margin-bottom: .6rem;
+      font-size: 1.05rem;
+    }
+    .takeaway p { margin-bottom: 0; color: var(--muted); font-size: .93rem; }
+    .number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 1.2rem;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      color: #8d5715;
+      font-weight: 850;
+    }
+
+    .path-card {
+      overflow: hidden;
+      border-radius: 28px;
+      background: var(--blue-dark);
+      color: #f7fbfb;
+      box-shadow: var(--shadow);
+    }
+    .path-intro {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(255,255,255,.07), transparent);
+    }
+    .path-intro h3 {
+      margin-bottom: .35rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .path-intro p { margin-bottom: 0; color: #c7dde4; }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid rgba(255,255,255,.13);
+    }
+    .milestone { padding: 1.35rem; border-right: 1px solid rgba(255,255,255,.12); }
+    .milestone:last-child { border-right: 0; }
+    .milestone small { display: block; margin-bottom: .6rem; color: #9fc3cf; font-weight: 750; }
+    .milestone b { display: block; margin-bottom: .35rem; }
+    .milestone span { display: block; color: #d3e5e9; font-size: .82rem; }
+
+    .career-list { display: grid; gap: .78rem; }
+    .career-item {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+    .career-trigger {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(190px, 1.3fr) .75fr .65fr 38px;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.2rem 1.35rem;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .career-trigger:hover { background: #f8faf7; }
+    .career-title b { display: block; font-size: 1.05rem; }
+    .career-title span, .metric span { display: block; color: var(--muted); font-size: .79rem; }
+    .metric b { font-size: 1.05rem; }
+    .chevron {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font-weight: 900;
+      transition: transform .2s ease;
+    }
+    .career-trigger[aria-expanded="true"] .chevron { transform: rotate(45deg); }
+    .career-detail {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 0 1.35rem 1.35rem;
+      border-top: 1px solid #edf0ec;
+    }
+    .career-detail.open { display: grid; }
+    .detail-block { padding-top: 1.15rem; }
+    .detail-block strong { display: block; margin-bottom: .35rem; color: var(--blue-dark); font-size: .82rem; text-transform: uppercase; letter-spacing: .07em; }
+    .detail-block p { margin-bottom: 0; color: var(--muted); font-size: .91rem; }
+
+    .method {
+      margin-top: 1rem;
+      padding: 1rem 1.15rem;
+      border-left: 4px solid var(--gold);
+      border-radius: 4px 14px 14px 4px;
+      background: var(--gold-soft);
+      color: #6b4a1f;
+      font-size: .83rem;
+    }
+
+    .directory-toolbar {
+      position: sticky;
+      top: .5rem;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: minmax(230px, 1fr) auto;
+      gap: .75rem;
+      margin-bottom: 1rem;
+      padding: .72rem;
+      border: 1px solid rgba(23,48,66,.12);
+      border-radius: 18px;
+      background: rgba(255,253,248,.91);
+      box-shadow: 0 10px 26px rgba(21,48,64,.08);
+      backdrop-filter: blur(10px);
+    }
+    .search-wrap { position: relative; }
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      left: .9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1.25rem;
+    }
+    #search {
+      width: 100%;
+      min-height: 44px;
+      padding: .7rem 1rem .7rem 2.45rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+    #search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(23,107,135,.12); }
+    .toolbar-actions { display: flex; gap: .5rem; }
+    .ghost-button {
+      min-height: 44px;
+      padding: .65rem .9rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 720;
+    }
+    .ghost-button:hover { border-color: var(--blue); color: var(--blue-dark); }
+    .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.15rem; }
+    .filter {
+      padding: .48rem .72rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      cursor: pointer;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 740;
+    }
+    .filter.active { border-color: var(--blue-dark); color: #fff; background: var(--blue-dark); }
+
+    .municipalities { display: grid; gap: .72rem; }
+    .municipality {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--surface);
+    }
+    .municipality.hidden { display: none; }
+    .municipality-trigger {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 36px;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem 1.15rem;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .municipality-trigger:hover { background: #f8faf7; }
+    .municipality-name { font-weight: 820; }
+    .count {
+      padding: .25rem .55rem;
+      border-radius: 999px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: .74rem;
+      font-weight: 760;
+    }
+    .municipality-trigger[aria-expanded="true"] .chevron { transform: rotate(45deg); }
+    .jobs { display: none; border-top: 1px solid #edf0ec; }
+    .jobs.open { display: block; }
+    .job {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 1.1rem;
+      padding: 1.25rem;
+      border-bottom: 1px solid #edf0ec;
+    }
+    .job:last-child { border-bottom: 0; }
+    .job.hidden { display: none; }
+    .job h3 { margin-bottom: .32rem; font-size: 1.03rem; }
+    .meta { color: var(--muted); font-size: .79rem; }
+    .job-summary { margin: .7rem 0 0; color: var(--muted); font-size: .87rem; }
+    .spec { margin-bottom: .7rem; }
+    .spec:last-child { margin-bottom: 0; }
+    .spec label {
+      display: block;
+      margin-bottom: .13rem;
+      color: var(--blue-dark);
+      font-size: .7rem;
+      font-weight: 820;
+      letter-spacing: .065em;
+      text-transform: uppercase;
+    }
+    .spec div { font-size: .84rem; color: #405866; }
+    .badges { display: flex; flex-wrap: wrap; gap: .38rem; margin-top: .65rem; }
+    .badge {
+      padding: .22rem .48rem;
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 790;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+    }
+    .badge.summary { background: #eee9df; color: #6b6256; }
+    .badge.reference { background: var(--gold-soft); color: #7a531e; }
+    .empty {
+      display: none;
+      padding: 2.5rem;
+      border: 1px dashed #bdc8c5;
+      border-radius: 18px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,.45);
+    }
+
+    .source-note {
+      margin-top: 1.2rem;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    footer {
+      margin-top: 4rem;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid rgba(23,48,66,.12);
+      color: var(--muted);
+      font-size: .82rem;
+    }
+    footer strong { color: var(--ink); }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; padding-top: 3rem; }
+      .hero-stat { max-width: 430px; }
+      .takeaways { grid-template-columns: 1fr; }
+      .path-intro { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr 1fr; }
+      .milestone { border-bottom: 1px solid rgba(255,255,255,.12); }
+      .career-trigger { grid-template-columns: 1fr auto; }
+      .career-trigger .metric { display: none; }
+      .career-detail { grid-template-columns: 1fr; }
+      .job { grid-template-columns: 1fr 1fr; }
+      .job > div:first-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 580px) {
+      .shell { width: min(100% - 22px, 1180px); }
+      .toplinks { display: none; }
+      .hero { padding: 2.2rem 0 3rem; }
+      h1 { font-size: clamp(2.8rem, 16vw, 4.5rem); }
+      .section { padding: 3.2rem 0; }
+      .section-head { display: block; }
+      .timeline { grid-template-columns: 1fr; }
+      .directory-toolbar { position: static; grid-template-columns: 1fr; }
+      .toolbar-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .job { grid-template-columns: 1fr; }
+      .job > div:first-child { grid-column: auto; }
+      .municipality-trigger { grid-template-columns: 1fr auto 32px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .topbar, .directory-toolbar, .filters, .chevron { display: none !important; }
+      .hero { padding-top: 1rem; }
+      .career-detail, .jobs { display: grid !important; }
+      .municipality, .career-item, .takeaway, .path-card { break-inside: avoid; box-shadow: none; }
+      .section { padding: 2rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="shell topbar">
+    <div class="brand"><span class="brand-mark">CO</span> Municipal Planning Index</div>
+    <nav class="toplinks" aria-label="Primary">
+      <a href="#path">Career path</a>
+      <a href="#levels">Career levels</a>
+      <a href="#directory">Municipalities</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="shell hero">
+      <div>
+        <p class="eyebrow">Colorado Front Range · Recent postings</p>
+        <h1>What does a planning career actually look like?</h1>
+        <p class="hero-copy">A plain-language index of municipal planning, GIS, housing and economic-development jobs—built to show the education, experience and pay expected during and after a Master of Urban and Regional Planning.</p>
+        <div class="pills">
+          <span class="pill">December 2025–November 2026</span>
+          <span class="pill" id="jurisdiction-pill">Loading jurisdictions…</span>
+          <span class="pill">Duplicate files removed</span>
+        </div>
+      </div>
+      <aside class="hero-stat" aria-label="Dataset summary">
+        <strong id="posting-count">—</strong>
+        <span>distinct posting records</span>
+        <hr>
+        <span class="small">This is a historical comparison—not a claim that every position is still open.</span>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="bottom-line">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">The bottom line</p>
+            <h2 id="bottom-line">The degree helps. Experience decides the timing.</h2>
+          </div>
+          <p>Across the postings, the MURP is valuable—but it usually complements municipal experience rather than replacing it. One continuous internship or assistant role is the cleanest bridge to Planner I.</p>
+        </div>
+        <div class="takeaways">
+          <article class="takeaway"><span class="number">1</span><b>Entry work can begin during school.</b><p>Intern, hourly planning assistant and technician roles range from no experience to roughly one year. Coursework, GIS samples and public-facing work matter here.</p></article>
+          <article class="takeaway"><span class="number">2</span><b>Planner I usually means a bachelor’s plus one year.</b><p>Littleton is more flexible at six months; Englewood starts at zero. A four-month internship alone will not satisfy every one-year screen.</p></article>
+          <article class="takeaway"><span class="number">3</span><b>Planner II is normally the first post-master’s promotion.</b><p>The recurring threshold is about three years. Loveland and Louisville explicitly give a completed master’s more weight than most employers.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="path" aria-labelledby="path-title">
+      <div class="shell">
+        <div class="path-card">
+          <div class="path-intro">
+            <div><p class="eyebrow" style="color:#b8d7df">A realistic path</p><h3 id="path-title">During and after the MURP</h3></div>
+            <p>This is the aggressive-but-defensible sequence suggested by the postings: begin relevant work before graduation, enter as Planner I, then promote after the experience clock catches up.</p>
+          </div>
+          <div class="timeline">
+            <div class="milestone"><small>2027–28</small><b>Intern / assistant</b><span>Planning support, GIS, permits, zoning research and public contact.</span></div>
+            <div class="milestone"><small>August 2028</small><b>Planner I target</b><span>Most credible with 6–12+ months of directly relevant work.</span></div>
+            <div class="milestone"><small>Spring 2029</small><b>MURP complete</b><span>The degree strengthens applications and can shorten some experience paths.</span></div>
+            <div class="milestone"><small>2030–31</small><b>Planner II</b><span>Earliest at two years; broadly competitive at three.</span></div>
+            <div class="milestone"><small>2032–34</small><b>Planner III / Senior</b><span>Four years is the aggressive edge; five to six is the common band.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="levels" aria-labelledby="levels-title">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="eyebrow">Career-level averages</p><h2 id="levels-title">Click a level to see what it takes.</h2></div>
+          <p>Salary figures are averages of published hiring minimums or range minimums, annualized at 2,080 hours. They describe the 2025–26 market—not a guaranteed offer.</p>
+        </div>
+        <div class="career-list" id="career-list"></div>
+        <div class="method"><strong>Method:</strong> duplicate copies were removed; each jurisdiction is counted once per level; specialized GIS, housing and director roles are excluded from Planner I–III averages. Categorical education requirements are summarized as the most common pattern. “Average experience” means the typical minimum, not the average tenure of successful hires.</div>
+      </div>
+    </section>
+
+    <section class="section" id="directory" aria-labelledby="directory-title">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="eyebrow">Municipal index</p><h2 id="directory-title">Browse by city, town, county or agency.</h2></div>
+          <p>Open a jurisdiction to see every distinct posting found in the uploaded files and saved job-watch material. “Summary record” means the saved source did not retain the complete advertisement.</p>
+        </div>
+        <div class="directory-toolbar">
+          <div class="search-wrap"><label for="search" style="position:absolute;left:-9999px">Search postings</label><input id="search" type="search" placeholder="Search city, title, GIS, housing, salary…"></div>
+          <div class="toolbar-actions"><button class="ghost-button" id="expand-all" type="button">Expand all</button><button class="ghost-button" id="collapse-all" type="button">Collapse all</button></div>
+        </div>
+        <div class="filters" aria-label="Filter postings">
+          <button class="filter active" data-filter="all" type="button">All</button>
+          <button class="filter" data-filter="entry" type="button">Entry &amp; internship</button>
+          <button class="filter" data-filter="planner" type="button">Planner series</button>
+          <button class="filter" data-filter="gis" type="button">GIS</button>
+          <button class="filter" data-filter="housing" type="button">Housing &amp; economic development</button>
+          <button class="filter" data-filter="leadership" type="button">Leadership</button>
+          <button class="filter" data-filter="adjacent" type="button">Adjacent roles</button>
+        </div>
+        <div class="municipalities" id="municipalities"></div>
+        <div class="empty" id="empty">No postings match that search and filter.</div>
+        <p class="source-note">Date caveat: when the advertisement contained only “posted X days ago,” the index uses the month of capture. When the saved job-watch summary lacked the original posting, missing education or experience is labeled rather than guessed.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell"><strong>Colorado Municipal Planning Career Index</strong><br>Compiled from user-supplied postings and saved job-watch records. Salary ranges, classifications and requirements change; always verify a live posting before applying.</div>
+  </footer>
+
+  <script>
+    const careerLevels = [
+      {
+        title: "Intern / Planning Assistant",
+        subtitle: "The during-school bridge",
+        salary: "$53,500",
+        sample: "3 salary sources",
+        experience: "0 years",
+        education: "Usually current enrollment, recent graduation, or two years of relevant coursework. GIS coursework and a portfolio can be enough for GIS internships.",
+        requirement: "Professional experience is generally not required. Employers look for research, writing, mapping, organization and evidence that the applicant can support real projects.",
+        meaning: "This is the strongest way to start the experience clock before graduation. The source average equals about $25.70 per hour."
+      },
+      {
+        title: "Planning Technician",
+        subtitle: "Administrative and technical entry",
+        salary: "$55,000",
+        sample: "4 salary sources",
+        experience: "≈ 1 year",
+        education: "Requirements vary widely: high school at Golden and Johnstown, associate degree at Commerce City, and bachelor’s at Broomfield.",
+        requirement: "The explicit minimum ranges from zero to two years. Customer service, permit intake, zoning support, records, planning commission packets and basic GIS are common duties.",
+        meaning: "A legitimate first planning job—not a dead end. The higher-paying technician role in Broomfield also has the strictest degree and experience screen."
+      },
+      {
+        title: "Planner I",
+        subtitle: "Entry-level professional planner",
+        salary: "$64,500",
+        sample: "9 jurisdictions",
+        experience: "≈ 1 year",
+        education: "A bachelor’s in planning or a closely related field is the near-universal baseline. A master’s is helpful but usually not required.",
+        requirement: "Most postings ask for one year. Littleton asks for six months and accepts internships; Englewood allows zero. Development review, zoning and public contact are the most transferable experiences.",
+        meaning: "This is the realistic August 2028 target if relevant work begins before then. At 3% annual pay growth, the dataset’s average would be roughly $70,500 in 2029."
+      },
+      {
+        title: "Planner II / Associate",
+        subtitle: "Independent mid-level planner",
+        salary: "$72,500",
+        sample: "13 jurisdictions/agencies",
+        experience: "≈ 3 years",
+        education: "A bachelor’s remains sufficient in most jurisdictions. A completed MURP is increasingly preferred and can replace about one year at Loveland or lower the experience path at Louisville.",
+        requirement: "Two years is the favorable edge; three years is the recurring standard. Employers expect independent case management, staff reports, presentations and more complex development review or policy work.",
+        meaning: "Starting in Planner I in August 2028 makes 2030 the earliest plausible promotion and 2031 the safer expectation. A 2029-equivalent average is about $79,200."
+      },
+      {
+        title: "Planner III / Senior Planner",
+        subtitle: "Advanced project leadership",
+        salary: "$85,500",
+        sample: "10 jurisdictions",
+        experience: "≈ 5 years",
+        education: "A bachelor’s is often still accepted, but a MURP and AICP become much more common preferences. Englewood requires a master’s; Lafayette requires AICP in its saved posting.",
+        requirement: "Four years is the aggressive edge at Thornton and Louisville’s master’s pathway. Five to six years is the broader market standard, along with complex cases, project management and mentoring.",
+        meaning: "This is a reasonable 2032–34 target after an August 2028 start. The source-year average is conservative because several jurisdictions publish much higher hiring-range ceilings."
+      },
+      {
+        title: "Principal / Manager / Supervisor",
+        subtitle: "Program, people and policy leadership",
+        salary: "$109,200",
+        sample: "7 jurisdiction-level examples",
+        experience: "≈ 7 years",
+        education: "Bachelor’s minimum; master’s frequently preferred or required. Specialized housing, redevelopment, transportation or finance knowledge can matter as much as the planning degree.",
+        requirement: "The broad band is six to ten years, usually with project, budget, consultant or staff leadership. Englewood’s Principal Planner requires ten years; Longmont’s manager roles ask for roughly five plus leadership.",
+        meaning: "This is not an automatic next title after Senior. It requires evidence of ownership: programs delivered, teams led, budgets managed and politically sensitive work completed."
+      },
+      {
+        title: "Director / Executive",
+        subtitle: "Department-wide accountability",
+        salary: "$182,900",
+        sample: "1 detailed posting",
+        experience: "8+ management years",
+        education: "The Thornton example requires a bachelor’s in planning or a related field; equivalent combinations may be considered.",
+        requirement: "Eight years of management-level community development experience, including five years of supervision. The job spans personnel, budget, compliance, planning and economic development.",
+        meaning: "Treat this as an example, not a market average—the dataset contains only one fully detailed director posting."
+      }
+    ];
+
+    const postings = [
+      {j:"Aurora", title:"Transportation Planning Supervisor – Public Works", date:"July 24, 2026", salary:"Hiring: $97,532–$121,915/year", edu:"Bachelor’s in community/regional planning, transportation planning or related field; master’s preferred", exp:"6 years in planning or transportation planning; supervisory experience preferred", summary:"Leads the transportation planning team, multimodal and corridor planning, grants, regional coordination and implementation of Aurora’s transportation master plan.", cat:["leadership","planner"], quality:"full"},
+
+      {j:"Berthoud", title:"GIS Technician (part-time)", date:"May 4, 2026", salary:"$27.84–$29.98/hour", edu:"Associate degree in GIS, geography, computer science or related field; equivalency allowed", exp:"1 year progressive GIS experience or equivalent", summary:"Maintains GIS databases and web applications, produces maps and reports, and collects municipal asset data using ESRI tools and GPS.", cat:["entry","gis"], quality:"full"},
+      {j:"Berthoud", title:"Planning Manager", date:"Approximately September 3, 2026", salary:"$115,731–$128,066/year", edu:"Not retained in the saved summary", exp:"APA listing categorized it as roughly 4–8 years", summary:"Planning management role observed on the APA Colorado board; the town-site link later appeared unavailable.", cat:["leadership","planner"], quality:"summary"},
+      {j:"Berthoud", title:"Senior Planner", date:"Approximately September 1, 2026", salary:"$93,836–$101,241/year", edu:"Not retained in the saved summary", exp:"APA listing categorized it as roughly 4–8 years", summary:"Senior municipal planning role saved from the APA Colorado board; the full advertisement was not retained.", cat:["planner","leadership"], quality:"summary"},
+
+      {j:"Boulder", title:"City Planner", date:"January 2026", salary:"$69,118–$100,298/year", edu:"Bachelor’s in urban planning, architecture or related field; master’s preferred", exp:"3 years development review, code administration or code-amendment experience", summary:"Processes development-code amendments, writes reports and presents recommendations; GIS and design software proficiency are preferred.", cat:["planner"], quality:"full"},
+      {j:"Boulder", title:"GIS Specialist – Open Space & Mountain Parks", date:"Early December 2025", salary:"$25.42–$36.87/hour", edu:"Associate degree in geography, natural resources, IT or related field", exp:"2 years working with geospatial data, editing and cartographic products", summary:"Creates and maintains spatial datasets and maps for natural and recreation resource projects within Open Space & Mountain Parks.", cat:["gis"], quality:"full"},
+
+      {j:"Boulder County", title:"Hourly Planning Assistant – Parks & Open Space", date:"September 4, 2026", salary:"Hiring: $25.00–$27.52/hour", edu:"Two years of college coursework in planning, environmental studies, geography, public administration, natural resources or related field", exp:"No professional experience required; relevant research, GIS and community engagement preferred", summary:"Supports resource planning projects, research, data organization, summaries, graphics, mapping and public engagement. This is the clearest no-experience planning bridge in the dataset.", cat:["entry","planner"], quality:"full"},
+      {j:"Boulder County", title:"Senior Planner – Parks & Open Space", date:"October 16, 2026", salary:"Hiring: $89,796–$109,578/year", edu:"Bachelor’s in planning, natural resources, landscape architecture or related field; additional education may count toward experience", exp:"5 years related planning, including 2 years of project management", summary:"Leads long-range and site-management planning, capital prioritization, public engagement and regional coordination for parks and open-space resources.", cat:["planner","leadership"], quality:"full"},
+      {j:"Boulder County", title:"Planner I – Long-Range Planning & Policy", date:"Observed September 2026", salary:"Hiring: $54,360–$56,000/year; class range to $78,288", edu:"Not retained in the saved job-watch summary", exp:"Not retained in the saved job-watch summary", summary:"Long-range planning and policy role in Community Planning & Permitting; the saved watch later marked the posting potentially stale or filled.", cat:["planner","entry"], quality:"summary"},
+      {j:"Boulder County", title:"Planner I / Planner II – Development Review", date:"Observed before September 2026", salary:"Planner I $60,756–$74,136; Planner II $70,320–$75,000", edu:"Not retained in the saved job-watch summary", exp:"Not retained; role was tied to development review, access and engineering", summary:"Flexibly staffed county development-review position. The saved timeline suggested the posting was already stale by September.", cat:["planner"], quality:"summary"},
+      {j:"Boulder County", title:"Long-Range Transportation Planner I", date:"Observed summer 2026", salary:"$60,756–$74,136/year", edu:"Not retained in the saved job-watch summary", exp:"Not retained in the saved job-watch summary", summary:"Planner I role focused on long-range transportation planning in Community Planning & Permitting.", cat:["planner","entry"], quality:"summary"},
+      {j:"Boulder County", title:"Principal / Senior Transportation Planner", date:"Observed summer 2026", salary:"Principal $86,736–$105,816; Senior $78,720–$96,036", edu:"Not retained in the saved job-watch summary", exp:"Not retained in the saved job-watch summary", summary:"Advanced transportation-planning classification covering regional coordination, policy and complex transportation programs.", cat:["planner","leadership"], quality:"summary"},
+      {j:"Boulder County", title:"Planner I – Development Review", date:"Observed summer 2026", salary:"Hiring: $60,756–$64,500/year", edu:"Not retained in the saved job-watch summary", exp:"Not retained in the saved job-watch summary", summary:"Entry-level development-review role in Community Planning & Permitting; the saved watch considered it likely closed.", cat:["planner","entry"], quality:"summary"},
+
+      {j:"Broomfield", title:"Planning Technician", date:"October 9, 2026", salary:"$64,979–$87,901/year", edu:"Bachelor’s degree required", exp:"1 year in municipal planning, community-development support or related field; experience cannot be replaced by education", summary:"Supports planning counter work, applications, research, commission materials, project websites, surveys and mapping. This is unusually well-paid—and unusually strict—for a technician title.", cat:["entry","planner"], quality:"full"},
+      {j:"Broomfield", title:"GIS Analyst", date:"January 14, 2026", salary:"$66,310–$89,731/year", edu:"Bachelor’s in geographical sciences, computer science, planning, environmental science, geomatics, engineering or related field", exp:"2 years as a GIS professional using ESRI and Autodesk; education cannot replace experience", summary:"Enterprise GIS role emphasizing municipal utility networks, databases, QA/QC, automation and integration with asset-management systems.", cat:["gis"], quality:"full"},
+
+      {j:"Commerce City", title:"Planning Technician", date:"2026 – date not stated in classification", salary:"$48,059–$72,088/year", edu:"Associate degree in planning, land use, geography or related field; equivalency allowed", exp:"No explicit minimum stated", summary:"Provides front-counter information, permit and application support, basic plan review, records and administrative assistance to professional planners.", cat:["entry","planner"], quality:"reference"},
+
+      {j:"Denver", title:"Associate City Planner – Affordable Housing", date:"Late October 2026", salary:"Target starting pay: $68,773–$88,000/year", edu:"Bachelor’s in planning, architecture, landscape architecture, historic preservation, engineering or related field", exp:"3 years of entry-level professional planning; additional education may substitute", summary:"Reviews affordable-housing development plans, zoning permits and design standards while coordinating an expedited, customer-focused permitting process.", cat:["planner","housing"], quality:"full"},
+      {j:"Denver", title:"Senior City Planner – Development Projects", date:"Late October 2026", salary:"Target starting pay: $90,000–$100,000/year", edu:"Bachelor’s in planning, architecture, construction management, public/business administration or related field", exp:"5 years reviewing development projects, rezoning or amendment requests", summary:"Acts as project champion for large, multi-phase developments, coordinating agencies, resolving code conflicts and managing projects from concept through approval.", cat:["planner","leadership"], quality:"full"},
+      {j:"Denver", title:"City Planner Associate – Classification Reference", date:"Reference document; not a live advertisement", salary:"Pay grade listed; dollar range not included", edu:"Bachelor’s in planning, architecture, landscape architecture, preservation, engineering or related field", exp:"3 years entry-level professional planning; additional education may substitute", summary:"Defines Denver’s Associate City Planner classification within a seven-level ladder from Staff through Manager.", cat:["planner"], quality:"reference"},
+
+      {j:"DRCOG (regional agency)", title:"Planner – Regional Housing Coordination", date:"October 28, 2026", salary:"Hiring: $72,000–$89,965/year", edu:"Bachelor’s in urban/regional planning, geography, public administration or related field", exp:"2–4 years related professional planning; equivalency allowed", summary:"Supports Metro Vision and the Regional Housing Strategy through research, technical assistance, stakeholder coordination, plans, mapping and data visualization.", cat:["planner","housing"], quality:"full"},
+
+      {j:"Englewood", title:"Planner I / II / Senior / Principal Planner", date:"December 17, 2025", salary:"I $59,261; II $66,966; Senior $75,671; Principal $85,508 minimums", edu:"Bachelor’s for I–II; master’s for Senior–Principal", exp:"I 0–3; II 3–6; Senior 6–10; Principal 10+ years", summary:"A complete four-level municipal ladder covering current planning, development review, long-range plans, code enforcement, public engagement and increasingly complex project leadership.", cat:["planner","entry","leadership"], quality:"full"},
+
+      {j:"Erie", title:"Planner / Senior Planner", date:"December 2025; similar role observed again September 2026", salary:"2026 hiring: Planner $69,118–$79,831; Senior $83,834–$100,601", edu:"Bachelor’s in planning/design-related field; master’s and AICP desired", exp:"Planner 2 years; Senior 5 years", summary:"Current-planning and community-building work with a strong design emphasis, including development review, staff reports, public presentations and stakeholder collaboration.", cat:["planner","leadership"], quality:"full"},
+
+      {j:"Firestone", title:"Plans Examiner Manager", date:"Approximately September 15, 2026", salary:"$94,553–$132,374/year", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"Manages building-code plan-review staff. Included as a planning-adjacent municipal role, but excluded from Planner career-level averages because it is building-code management rather than land-use planning.", cat:["adjacent","leadership"], quality:"summary"},
+
+      {j:"Fort Lupton", title:"Planner I", date:"August 7, 2026", salary:"$58,000–$69,600/year", edu:"Bachelor’s in planning or related field; master’s preferred; applicants pursuing a planning degree may be considered", exp:"1 year planning experience or equivalent combination", summary:"Reviews development and permits, writes reports, supports long-range planning and economic development, presents to boards and helps administer zoning requirements.", cat:["entry","planner"], quality:"full"},
+
+      {j:"Golden", title:"Planning Technician I", date:"September 25, 2026", salary:"$25.01–$30.02/hour ($52,021–$62,442 annualized)", edu:"High school diploma required; bachelor’s preferred", exp:"2 years progressive administrative/customer support; building permit, land-use, real-estate or planning experience preferred", summary:"Handles customer service, addressing, permits, Planning Commission and preservation-board packets and administrative support. Real-estate experience is explicitly relevant.", cat:["entry","planner"], quality:"full"},
+
+      {j:"Johnstown", title:"Planning Technician", date:"Date not stated; saved August 2026", salary:"Not stated in the saved job description", edu:"High school required; associate degree in planning, architecture, construction management or social sciences preferred", exp:"Customer service required; 2 years plan review, zoning or code experience preferred", summary:"Provides public-facing planning information, reviews basic building permits and zoning requests, maintains records and researches routine planning questions.", cat:["entry","planner"], quality:"reference"},
+      {j:"Johnstown", title:"Planner I", date:"September 3, 2026", salary:"$61,578–$86,209/year", edu:"Not retained in the saved summary", exp:"Listed as entry level, approximately 0–1 year", summary:"Entry-level municipal Planner I advertised through APA Colorado; the complete advertisement was not retained.", cat:["entry","planner"], quality:"summary"},
+
+      {j:"Lafayette", title:"Planner II / Senior Planner", date:"July 27, 2026", salary:"Planner II $71,399–$99,937; Senior $78,825–$110,334", edu:"Degree in planning or related field", exp:"Planner II 3 years municipal planning + AICP; Senior 5 years municipal planning + AICP; equivalency allowed", summary:"Advanced current and long-range planning, complex development review, historic preservation, policy, public meetings and project/program management.", cat:["planner","leadership"], quality:"full"},
+      {j:"Lafayette", title:"GIS Intern", date:"March 10, 2026", salary:"$28.10–$39.32/hour; maximum 600 hours", edu:"Current student or recent graduate in GIS, geography, environmental science, computer science or related program", exp:"No fixed minimum; equivalent training and experience considered", summary:"Supports municipal GIS data, land records, GPS collection, QA/QC, ArcGIS web applications, engineering drawings and workflow automation.", cat:["entry","gis"], quality:"full"},
+
+      {j:"Larimer County", title:"Planning Technician", date:"September 2026", salary:"$26.49–$31.49/hour", edu:"Not retained in the saved job-watch summary", exp:"Listed as entry level, approximately 0–1 year", summary:"Entry-level county planning technician role found through APA Colorado. Included because Larimer County borders Boulder County and is part of the practical job market.", cat:["entry","planner"], quality:"summary"},
+
+      {j:"Littleton", title:"Planner I / Planner II", date:"November 2026", salary:"Hiring: Planner I $69,141–$72,780; Planner II $77,330–$81,400", edu:"Bachelor’s in urban planning or closely related field", exp:"Planner I 6 months; Planner II 2 years; internships and equivalent combinations may count", summary:"Flexibly staffed current-planning role handling development review, research, staff reports, public communication and increasingly complex assignments.", cat:["entry","planner"], quality:"full"},
+
+      {j:"Longmont", title:"GIS Intern", date:"December 2025", salary:"$24.00/hour", edu:"Completion of the first college year in GIS, geography, engineering or another technical discipline; GIS coursework desired", exp:"No professional experience required", summary:"Researches and maintains GIS data, collects field information, digitizes engineering and parcel documents and assists with production spatial layers.", cat:["entry","gis"], quality:"full"},
+      {j:"Longmont", title:"Community Manager – Supportive Housing", date:"October 8, 2026", salary:"Hiring: $29.89–$33.21/hour", edu:"Associate degree in business or related field may be considered with relevant experience", exp:"2 years permanent supportive-housing work plus progressively responsible property-management/affordable-housing experience", summary:"Runs on-site leasing, compliance, resident relations and property management for supportive and affordable housing. Included as a housing-adjacent path, not a planner classification.", cat:["housing","adjacent"], quality:"full"},
+      {j:"Longmont", title:"Housing Investment Manager", date:"August 2025 file label; open until filled", salary:"Hiring: $111,384–$123,768/year", edu:"Bachelor’s in planning, public administration, housing development or related field; master’s may substitute for experience", exp:"4–5 years housing/community development, planning or project management, including supervisory capability", summary:"Directs affordable-housing planning, inclusionary-housing implementation, land acquisition, finance, CDBG/HOME work, development projects and staff.", cat:["housing","leadership"], quality:"full"},
+      {j:"Longmont", title:"Redevelopment & Revitalization Manager", date:"October 2026", salary:"2026 hiring: $119,880–$133,200/year", edu:"Bachelor’s-equivalent preparation in planning, business administration, economic development or related field", exp:"5 years increasingly responsible redevelopment/economic-development/land-use work, including 4 years project management", summary:"Leads complex redevelopment and economic-vitality initiatives, coordinates developers and agencies and delivers reports and recommendations to city leadership.", cat:["housing","leadership","planner"], quality:"full"},
+
+      {j:"Louisville", title:"City Planner II / Planner III", date:"June 8, 2026", salary:"Hiring: II $72,530–$85,218; III $87,755–$103,126", edu:"Master’s in planning/design-related field or bachelor’s in a related field", exp:"II: master’s +2–3 years or bachelor’s +3–4; III: master’s +4 or bachelor’s +6", summary:"Reviews development and permits, prepares maps and graphics, answers zoning questions, manages projects and performs increasingly complex municipal planning work.", cat:["planner","leadership"], quality:"full"},
+      {j:"Louisville", title:"Planner II / Senior Planner – Historic Preservation Specialist", date:"Observed September 2026", salary:"Hiring: II $71,115–$83,554; Senior $86,050–$101,109", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"Historic-preservation specialization offered at either Planner II or Senior level; saved as an open-until-filled listing.", cat:["planner","leadership"], quality:"summary"},
+
+      {j:"Loveland", title:"City Planner I / City Planner II – Current Planning", date:"June 26, 2026", salary:"Hiring: I $67,974–$79,872; II $76,128–$89,440", edu:"Bachelor’s in urban/regional planning or closely related field; graduate degree preferred", exp:"I 1 year, preferably development review; II 3 years including 1 year development review; master’s replaces 1 year", summary:"Processes development, zoning and building-permit applications, conducts inspections and prepares increasingly complex staff reports, research and presentations.", cat:["entry","planner"], quality:"full"},
+
+      {j:"Lyons", title:"Neighborhood Services Coordinator", date:"August 21, 2026", salary:"$26.32–$35.65/hour ($58,010–$74,152/year reported)", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"Planning-adjacent code-enforcement and case-management role supporting the Planning and Building Department with land-use, nuisance and property-maintenance complaints.", cat:["adjacent","entry"], quality:"summary"},
+
+      {j:"Mead", title:"Planner I / Planner II / Planner III", date:"January 2, 2026", salary:"I $64,453; II $77,988; III $85,787 minimums", edu:"Bachelor’s in planning, geography, public policy or related field; master’s desirable for II–III", exp:"I 1 year; II 3 municipal years; III 5 municipal years; equivalency may be considered", summary:"A complete three-level ladder spanning routine to complex development review, long-range planning, public presentations, project management and leadership.", cat:["entry","planner","leadership"], quality:"full"},
+
+      {j:"Parker", title:"Planner I / II / III – Development Review", date:"November 9, 2026", salary:"Hiring: I $64,719–$77,663; II $69,738–$85,429; III $76,712–$93,972", edu:"Bachelor’s in planning, geography, landscape architecture, architecture or related field", exp:"I 1 year; II 3 years; III 6 years", summary:"Flexibly staffed development-review series covering zoning, permits, inspections, staff reports, GIS, public engagement and progressively more complex cases and independent judgment.", cat:["entry","planner","leadership"], quality:"full"},
+
+      {j:"Superior", title:"Code Enforcement Officer (part-time)", date:"September 25, 2026", salary:"$26.83–$40.08/hour; hiring $26.83–$33.46", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"General municipal code enforcement covering nuisances, health and safety, notices and complaints. Included as adjacent work but excluded from planner averages because it was not clearly tied to land-use planning.", cat:["adjacent","entry"], quality:"summary"},
+
+      {j:"Thornton", title:"Planner I / Planner II – Current Planning", date:"December 10, 2025", salary:"2026 hiring: I $76,011–$88,173; II $81,337–$94,350", edu:"Bachelor’s in planning or related field; equivalency considered", exp:"I 1 year related; II 3 years professional planning", summary:"Flexibly staffed development-review position with hybrid options, building from routine case work to independent, complex review and public presentations.", cat:["entry","planner"], quality:"full"},
+      {j:"Thornton", title:"Planner I / II / Senior – Current Planning", date:"August 7, 2026", salary:"Hiring: I $76,011–$88,173; II $81,337–$94,350; Senior $93,134–$108,035", edu:"Bachelor’s in planning or related field; master’s preferred for Senior", exp:"I 1 year; II 3 years; Senior 4 years progressively responsible planning", summary:"A flexibly linked ladder from routine development review through advanced current/long-range planning, complex applications, comprehensive plans, ordinance revisions and mentoring.", cat:["entry","planner","leadership"], quality:"full"},
+      {j:"Thornton", title:"Planning & Economic Development Director", date:"October 7, 2026", salary:"$182,914–$241,446/year", edu:"Bachelor’s in planning or related field; equivalency considered", exp:"8 years management-level community development, including 5 years supervisory experience", summary:"Department executive responsible for planning, economic development, personnel, strategy, budgets, compliance and cross-department leadership.", cat:["leadership","planner","housing"], quality:"full"},
+
+      {j:"Westminster", title:"Economic Development Manager – Housing Manager", date:"October 19, 2026", salary:"$147,633–$184,539/year", edu:"Bachelor’s in public/business administration, economic development, economics, real-estate development or related field; master’s preferred", exp:"7+ years senior management/administration in economic development, housing, small business or redevelopment", summary:"City leadership role translating strategy into housing and economic-development policy, programs, people management, partnerships and resource allocation.", cat:["housing","leadership"], quality:"full"},
+      {j:"Westminster", title:"Planner / Senior Planner", date:"Observed before September 2026", salary:"Not shown in the saved summary", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"Planning-series posting observed in the job watch but no longer visible on Westminster’s careers page by late September.", cat:["planner","leadership"], quality:"summary"}
+    ];
+
+    const money = new Intl.NumberFormat("en-US", {maximumFractionDigits: 0});
+
+    function renderCareerLevels() {
+      const root = document.getElementById("career-list");
+      root.innerHTML = careerLevels.map((level, index) => `
+        <article class="career-item">
+          <button class="career-trigger" type="button" aria-expanded="${index === 2 ? "true" : "false"}" aria-controls="career-${index}">
+            <span class="career-title"><b>${level.title}</b><span>${level.subtitle}</span></span>
+            <span class="metric"><b>${level.salary}</b><span>average starting salary</span></span>
+            <span class="metric"><b>${level.experience}</b><span>typical minimum experience</span></span>
+            <span class="chevron">+</span>
+          </button>
+          <div class="career-detail ${index === 2 ? "open" : ""}" id="career-${index}">
+            <div class="detail-block"><strong>Education</strong><p>${level.education}</p></div>
+            <div class="detail-block"><strong>Experience & work</strong><p>${level.requirement}</p></div>
+            <div class="detail-block"><strong>What it means</strong><p>${level.meaning}<br><small>${level.sample}</small></p></div>
+          </div>
+        </article>`).join("");
+
+      root.querySelectorAll(".career-trigger").forEach(button => {
+        button.addEventListener("click", () => {
+          const panel = document.getElementById(button.getAttribute("aria-controls"));
+          const open = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!open));
+          panel.classList.toggle("open", !open);
+        });
+      });
+    }
+
+    function qualityBadge(quality) {
+      const labels = {full:"Full posting", summary:"Summary record", reference:"Classification reference"};
+      return `<span class="badge ${quality}">${labels[quality] || quality}</span>`;
+    }
+
+    function renderDirectory() {
+      const grouped = postings.reduce((map, job) => {
+        (map[job.j] ||= []).push(job);
+        return map;
+      }, {});
+      const names = Object.keys(grouped).sort((a,b) => a.localeCompare(b));
+      document.getElementById("posting-count").textContent = money.format(postings.length);
+      document.getElementById("jurisdiction-pill").textContent = `${names.length} jurisdictions & agencies`;
+
+      document.getElementById("municipalities").innerHTML = names.map((name, index) => {
+        const jobs = grouped[name];
+        return `<section class="municipality" data-name="${name.toLowerCase()}">
+          <button class="municipality-trigger" type="button" aria-expanded="${index < 2 ? "true" : "false"}" aria-controls="municipality-${index}">
+            <span class="municipality-name">${name}</span>
+            <span class="count">${jobs.length} ${jobs.length === 1 ? "posting" : "postings"}</span>
+            <span class="chevron">+</span>
+          </button>
+          <div class="jobs ${index < 2 ? "open" : ""}" id="municipality-${index}">
+            ${jobs.map(job => `<article class="job" data-cats="${job.cat.join(" ")}" data-search="${[job.j,job.title,job.date,job.salary,job.edu,job.exp,job.summary].join(" ").toLowerCase().replaceAll('"','&quot;')}">
+              <div><h3>${job.title}</h3><div class="meta">Advertised: ${job.date}</div><div class="badges">${job.cat.map(c => `<span class="badge">${c}</span>`).join("")}${qualityBadge(job.quality)}</div><p class="job-summary">${job.summary}</p></div>
+              <div><div class="spec"><label>Salary</label><div>${job.salary}</div></div><div class="spec"><label>Education</label><div>${job.edu}</div></div></div>
+              <div><div class="spec"><label>Experience</label><div>${job.exp}</div></div></div>
+            </article>`).join("")}
+          </div>
+        </section>`;
+      }).join("");
+
+      document.querySelectorAll(".municipality-trigger").forEach(button => {
+        button.addEventListener("click", () => toggleMunicipality(button));
+      });
+    }
+
+    function toggleMunicipality(button, force) {
+      const panel = document.getElementById(button.getAttribute("aria-controls"));
+      const current = button.getAttribute("aria-expanded") === "true";
+      const next = typeof force === "boolean" ? force : !current;
+      button.setAttribute("aria-expanded", String(next));
+      panel.classList.toggle("open", next);
+    }
+
+    let activeFilter = "all";
+    function applyFilters() {
+      const term = document.getElementById("search").value.trim().toLowerCase();
+      let municipalityMatches = 0;
+      document.querySelectorAll(".municipality").forEach(section => {
+        let visibleJobs = 0;
+        section.querySelectorAll(".job").forEach(job => {
+          const categoryMatch = activeFilter === "all" || job.dataset.cats.split(" ").includes(activeFilter);
+          const textMatch = !term || job.dataset.search.includes(term);
+          const visible = categoryMatch && textMatch;
+          job.classList.toggle("hidden", !visible);
+          if (visible) visibleJobs += 1;
+        });
+        section.classList.toggle("hidden", visibleJobs === 0);
+        if (visibleJobs) {
+          municipalityMatches += 1;
+          if (term || activeFilter !== "all") toggleMunicipality(section.querySelector(".municipality-trigger"), true);
+        }
+        section.querySelector(".count").textContent = `${visibleJobs} ${visibleJobs === 1 ? "posting" : "postings"}`;
+      });
+      document.getElementById("empty").style.display = municipalityMatches ? "none" : "block";
+    }
+
+    renderCareerLevels();
+    renderDirectory();
+
+    document.getElementById("search").addEventListener("input", applyFilters);
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+    document.getElementById("expand-all").addEventListener("click", () => document.querySelectorAll(".municipality:not(.hidden) .municipality-trigger").forEach(b => toggleMunicipality(b, true)));
+    document.getElementById("collapse-all").addEventListener("click", () => document.querySelectorAll(".municipality-trigger").forEach(b => toggleMunicipality(b, false)));
+  </script>
+</body>
+</html>

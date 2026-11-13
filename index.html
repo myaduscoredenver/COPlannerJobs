@@ -296,6 +296,93 @@
       font-size: .83rem;
     }
 
+    .keyword-layout {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 1rem;
+    }
+    .keyword-card {
+      padding: 1.45rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 7px 20px rgba(21,48,64,.045);
+    }
+    .keyword-card h3 {
+      margin-bottom: .35rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.5rem;
+      font-weight: 650;
+    }
+    .keyword-card > p { margin-bottom: 1.1rem; color: var(--muted); font-size: .88rem; }
+    .keyword-cloud { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .keyword-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .48rem;
+      padding: .55rem .68rem;
+      border: 1px solid rgba(23,107,135,.17);
+      border-radius: 11px;
+      background: #f3f8f7;
+      color: #284b59;
+      font-size: .82rem;
+    }
+    .keyword-chip b { font-weight: 760; }
+    .keyword-chip small {
+      min-width: 2.05rem;
+      padding: .15rem .36rem;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      text-align: center;
+      font-size: .68rem;
+      font-weight: 820;
+    }
+    .tool-list { display: grid; gap: .7rem; }
+    .tool-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid #e9eeea;
+    }
+    .tool-row:last-child { padding-bottom: 0; border-bottom: 0; }
+    .tool-row b { display: block; font-size: .9rem; }
+    .tool-row span { display: block; color: var(--muted); font-size: .76rem; }
+    .tool-count {
+      color: var(--blue-dark) !important;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+    .keyword-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .resume-keywords {
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      background: var(--blue-dark);
+      color: #f7fbfb;
+    }
+    .resume-keywords h3 { margin-bottom: .45rem; font-size: 1.12rem; }
+    .resume-keywords p { margin-bottom: .95rem; color: #c7dde4; font-size: .87rem; }
+    .resume-keywords .keyword-chip {
+      border-color: rgba(255,255,255,.16);
+      background: rgba(255,255,255,.1);
+      color: #fff;
+    }
+    .spss-note {
+      padding: 1.5rem;
+      border: 1px solid #e2c99f;
+      border-radius: var(--radius);
+      background: var(--gold-soft);
+    }
+    .spss-note strong { display: block; margin-bottom: .3rem; color: #754a14; font-size: 1.1rem; }
+    .spss-note p { margin-bottom: 0; color: #6b4a1f; font-size: .87rem; }
+
     .directory-toolbar {
       position: sticky;
       top: .5rem;
@@ -459,6 +546,7 @@
       .career-trigger { grid-template-columns: 1fr auto; }
       .career-trigger .metric { display: none; }
       .career-detail { grid-template-columns: 1fr; }
+      .keyword-layout { grid-template-columns: 1fr; }
       .job { grid-template-columns: 1fr 1fr; }
       .job > div:first-child { grid-column: 1 / -1; }
     }
@@ -471,6 +559,7 @@
       .section { padding: 3.2rem 0; }
       .section-head { display: block; }
       .timeline { grid-template-columns: 1fr; }
+      .keyword-bottom { grid-template-columns: 1fr; }
       .directory-toolbar { position: static; grid-template-columns: 1fr; }
       .toolbar-actions { display: grid; grid-template-columns: 1fr 1fr; }
       .job { grid-template-columns: 1fr; }
@@ -483,7 +572,7 @@
       .topbar, .directory-toolbar, .filters, .chevron { display: none !important; }
       .hero { padding-top: 1rem; }
       .career-detail, .jobs { display: grid !important; }
-      .municipality, .career-item, .takeaway, .path-card { break-inside: avoid; box-shadow: none; }
+      .municipality, .career-item, .takeaway, .path-card, .keyword-card, .resume-keywords, .spss-note { break-inside: avoid; box-shadow: none; }
       .section { padding: 2rem 0; }
     }
   </style>
@@ -495,6 +584,7 @@
     <nav class="toplinks" aria-label="Primary">
       <a href="#path">Career path</a>
       <a href="#levels">Career levels</a>
+      <a href="#keywords">Keywords</a>
       <a href="#directory">Municipalities</a>
     </nav>
   </header>
@@ -562,6 +652,65 @@
         </div>
         <div class="career-list" id="career-list"></div>
         <div class="method"><strong>Method:</strong> duplicate copies were removed; each jurisdiction is counted once per level; specialized GIS, housing and director roles are excluded from Planner I–III averages. Categorical education requirements are summarized as the most common pattern. “Average experience” means the typical minimum, not the average tenure of successful hires.</div>
+      </div>
+    </section>
+
+    <section class="section" id="keywords" aria-labelledby="keywords-title">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="eyebrow">Keywords employers actually use</p><h2 id="keywords-title">Match the work first. Name the tools second.</h2></div>
+          <p>These counts come from 23 unique postings with searchable full text. The larger index also contains summary-only records, so the ranking is directional—not a claim about the entire labor market.</p>
+        </div>
+        <div class="keyword-layout">
+          <article class="keyword-card">
+            <h3>Core planning language</h3>
+            <p>The most reusable words and phrases for coursework, portfolios, cover letters and interviews.</p>
+            <div class="keyword-cloud" aria-label="Planning keyword frequency">
+              <span class="keyword-chip"><b>Research &amp; data analysis</b><small>21/23</small></span>
+              <span class="keyword-chip"><b>Public hearings &amp; presentations</b><small>18/23</small></span>
+              <span class="keyword-chip"><b>Zoning &amp; land-use code</b><small>15/23</small></span>
+              <span class="keyword-chip"><b>Customer service &amp; public inquiries</b><small>15/23</small></span>
+              <span class="keyword-chip"><b>Development review</b><small>14/23</small></span>
+              <span class="keyword-chip"><b>Staff reports &amp; technical writing</b><small>13/23</small></span>
+              <span class="keyword-chip"><b>Project management</b><small>13/23</small></span>
+              <span class="keyword-chip"><b>Comprehensive / long-range planning</b><small>13/23</small></span>
+              <span class="keyword-chip"><b>Permit review</b><small>12/23</small></span>
+              <span class="keyword-chip"><b>Community engagement</b><small>11/23</small></span>
+            </div>
+          </article>
+          <article class="keyword-card">
+            <h3>Named software</h3>
+            <p>Tool names matter, but the postings are much more consistent about planning duties.</p>
+            <div class="tool-list">
+              <div class="tool-row"><div><b>GIS / ArcGIS / Esri</b><span>Mapping, spatial analysis and data visualization</span></div><span class="tool-count">17/23</span></div>
+              <div class="tool-row"><div><b>Excel / Microsoft Office</b><span>Analysis, reports, presentations and daily administration</span></div><span class="tool-count">15/23</span></div>
+              <div class="tool-row"><div><b>Adobe Creative Suite</b><span>Graphics and public-facing documents</span></div><span class="tool-count">2/23</span></div>
+              <div class="tool-row"><div><b>Bluebeam</b><span>Plan and document review</span></div><span class="tool-count">1/23</span></div>
+              <div class="tool-row"><div><b>AutoCAD / Autodesk</b><span>Technical plans and spatial design</span></div><span class="tool-count">1/23</span></div>
+              <div class="tool-row"><div><b>SketchUp</b><span>Three-dimensional visualization</span></div><span class="tool-count">1/23</span></div>
+            </div>
+          </article>
+        </div>
+        <div class="keyword-bottom">
+          <aside class="resume-keywords">
+            <h3>Best Planner I résumé cluster</h3>
+            <p>Use these only when your experience or coursework can prove them. Mirror the exact wording of each advertisement.</p>
+            <div class="keyword-cloud">
+              <span class="keyword-chip"><b>Development review</b></span>
+              <span class="keyword-chip"><b>Zoning research</b></span>
+              <span class="keyword-chip"><b>Staff reports</b></span>
+              <span class="keyword-chip"><b>ArcGIS</b></span>
+              <span class="keyword-chip"><b>Excel</b></span>
+              <span class="keyword-chip"><b>Public communication</b></span>
+              <span class="keyword-chip"><b>Project coordination</b></span>
+            </div>
+          </aside>
+          <aside class="spss-note">
+            <strong>SPSS: 0 mentions</strong>
+            <p>That does not make SPSS coursework useless. Present it as evidence of quantitative research, survey analysis, regression and data interpretation. For municipal Planner I applications, “data analysis” is the transferable keyword; SPSS itself is not a hiring keyword in this sample.</p>
+          </aside>
+        </div>
+        <div class="method"><strong>Reading the counts:</strong> each number is the share of unique, searchable full-text postings containing at least one related term—not the number of times a word appeared. A posting counted once whether it used the phrase once or repeatedly.</div>
       </div>
     </section>
 

@@ -480,6 +480,26 @@
     .job h3 { margin-bottom: .32rem; font-size: 1.03rem; }
     .meta { color: var(--muted); font-size: .79rem; }
     .job-summary { margin: .7rem 0 0; color: var(--muted); font-size: .87rem; }
+    .job-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: .7rem;
+      color: var(--blue-dark);
+      font-size: .78rem;
+      font-weight: 780;
+      text-decoration: none;
+    }
+    .job-link:hover { text-decoration: underline; }
+    .jurisdiction-note {
+      margin: 1rem 1.15rem .25rem;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid var(--gold);
+      border-radius: 5px 14px 14px 5px;
+      background: var(--gold-soft);
+      color: #6b4a1f;
+      font-size: .84rem;
+    }
+    .jurisdiction-note a { font-weight: 780; }
     .spec { margin-bottom: .7rem; }
     .spec:last-child { margin-bottom: 0; }
     .spec label {
@@ -591,12 +611,12 @@
           <span class="pill">December 2025–November 2026</span>
           <span class="pill" id="jurisdiction-pill">Loading jurisdictions…</span>
           <span class="pill">Duplicate files removed</span>
-          <span class="pill">Updated November 13, 2026</span>
+          <span class="pill">Updated November 20, 2026</span>
         </div>
       </div>
       <aside class="hero-stat" aria-label="Dataset summary">
         <strong id="posting-count">—</strong>
-        <span>distinct posting records</span>
+        <span>posting &amp; classification records</span>
         <hr>
         <span class="small">This is a historical comparison—not a claim that every position is still open.</span>
       </aside>
@@ -707,7 +727,7 @@
       <div class="shell">
         <div class="section-head">
           <div><p class="eyebrow">Municipal index</p><h2 id="directory-title">Browse by city, town, county or agency.</h2></div>
-          <p>Open a jurisdiction to see every distinct posting found in the uploaded files, saved job-watch material and verified Colorado listings. “Open when checked” means the source appeared active on November 13, 2026—not that it will remain open.</p>
+          <p>Open a jurisdiction to see distinct advertisements and clearly labeled classification references. Erie now includes its official planning, permit, housing, GIS and transportation ladder. “Open when checked” means the source appeared active on November 13, 2026—not that it will remain open.</p>
         </div>
         <div class="directory-toolbar">
           <div class="search-wrap"><label for="search" style="position:absolute;left:-9999px">Search postings</label><input id="search" type="search" placeholder="Search city, title, GIS, housing, salary…"></div>
@@ -735,6 +755,10 @@
   </footer>
 
   <script>
+    const jurisdictionNotes = {
+      Erie: `<strong>Erie career ladder:</strong> the first item is a recent advertisement; the remaining items are standing job classifications paired with the Town’s current 2026 pay scale. They show jobs Erie can hire, but they do not mean those jobs are open now. <a href="https://www.erieco.gov/1956/Job-Descriptions-Pay-Scales" target="_blank" rel="noopener noreferrer">View Erie’s official job descriptions and pay scales ↗</a>`
+    };
+
     const careerLevels = [
       {
         title: "Intern / Planning Assistant",
@@ -839,7 +863,23 @@
 
       {j:"Englewood", title:"Planner I / II / Senior / Principal Planner", date:"December 17, 2025", salary:"I $59,261; II $66,966; Senior $75,671; Principal $85,508 minimums", edu:"Bachelor’s for I–II; master’s for Senior–Principal", exp:"I 0–3; II 3–6; Senior 6–10; Principal 10+ years", summary:"A complete four-level municipal ladder covering current planning, development review, long-range plans, code enforcement, public engagement and increasingly complex project leadership.", cat:["planner","entry","leadership"], quality:"full"},
 
-      {j:"Erie", title:"Planner / Senior Planner", date:"December 2025; similar role observed again September 2026", salary:"2026 hiring: Planner $69,118–$79,831; Senior $83,834–$100,601", edu:"Bachelor’s in planning/design-related field; master’s and AICP desired", exp:"Planner 2 years; Senior 5 years", summary:"Current-planning and community-building work with a strong design emphasis, including development review, staff reports, public presentations and stakeholder collaboration.", cat:["planner","leadership"], quality:"full"},
+      {j:"Erie", title:"Planner / Senior Planner – Recent Advertisement", date:"December 2025; similar role observed again September 2026", salary:"2026 hiring: Planner $69,118–$79,831; Senior $83,834–$100,601", edu:"Bachelor’s in planning/design-related field; master’s and AICP desired", exp:"Planner 2 years; Senior 5 years", summary:"The advertisement combined two possible hiring levels. Work emphasized current planning, community building and design through development review, staff reports, public presentations and stakeholder collaboration.", cat:["planner","leadership"], quality:"full"},
+      {j:"Erie", title:"Permitting Administrative Intern", date:"June 1, 2024", dateLabel:"Classification effective", salary:"$19–$23/hour", edu:"No degree requirement stated; applicant must be at least 17", exp:"No experience required; 6–12 months of customer-service experience desired", summary:"A paid, part-time entry point into municipal permitting. Processes applications, records permit data, issues approved permits and supports the public counter for at least 20 hours per week.", source:"https://www.erieco.gov/DocumentCenter/View/22762/Permitting-Administrative-Intern", cat:["entry","adjacent"], quality:"reference"},
+      {j:"Erie", title:"Transportation Planning / Engineering Intern", date:"March 5, 2025", dateLabel:"Classification effective", salary:"$22–$25/hour", edu:"Current undergraduate or graduate enrollment in planning, transportation/traffic engineering, public administration, geography, GIS or related field", exp:"No professional-experience minimum stated", summary:"A paid transportation-planning bridge for a student: data analysis, GIS mapping, public engagement, project-map updates, micromobility, microtransit and traffic-calming support. The description was written for an April–September 2025 internship and is not a current vacancy notice.", source:"https://www.erieco.gov/DocumentCenter/View/22820/Transportation-Intern", cat:["entry","planner"], quality:"reference"},
+      {j:"Erie", title:"Permit Technician", date:"January 19, 2023", dateLabel:"Classification effective", salary:"Grade 9: $51,755–$67,799/year", edu:"High school diploma or GED", exp:"1 year of responsible administrative/clerical work with heavy public contact and computer use; combinations considered", summary:"Reviews permit intake for completeness, calculates fees, provides basic zoning and code information, maintains building and planning records and schedules inspections. This is planning-adjacent rather than a professional planner classification.", source:"https://www.erieco.gov/DocumentCenter/View/22761/Permit-Technician", cat:["entry","adjacent"], quality:"reference"},
+      {j:"Erie", title:"Senior Permit Technician", date:"January 19, 2023", dateLabel:"Classification effective", salary:"Grade 11: $59,810–$78,351/year", edu:"High school diploma or GED; equivalent combinations considered", exp:"2 years in a public-agency building department with complex permitting experience", summary:"Handles more technical permit, zoning and code questions with considerable independence. Erie requires the ICC Permit Technician certification within six months of hire.", source:"https://www.erieco.gov/DocumentCenter/View/22765/Senior-Permit-Technician", cat:["adjacent"], quality:"reference"},
+      {j:"Erie", title:"Planning Technician", date:"February 26, 2026", dateLabel:"Classification effective", salary:"Grade 12: $64,295–$84,227/year", edu:"High school diploma or GED required; bachelor’s in planning, landscape architecture, urban design, public administration or related field desired", exp:"3 years in planning, building, development review, administration or customer service; combinations considered", summary:"Erie’s clearest early-career planning classification. It combines front-counter service, routine plan and permit review, land-use applications, planning documents, public/developer contact and Planning Commission support. ArcGIS, Bluebeam, Adobe and Microsoft Office are named tools.", source:"https://www.erieco.gov/DocumentCenter/View/22773/Planning-Technician", cat:["entry","planner"], quality:"reference"},
+      {j:"Erie", title:"GIS Technician", date:"March 10, 2026", dateLabel:"Classification effective", salary:"Grade 12: $64,295–$84,227/year", edu:"Associate degree in GIS, geography, planning, civil engineering, computer science or related field, or a GIS certificate", exp:"1 year of related on-the-job GIS and mapping experience; combinations considered", summary:"Maintains town GIS/CAD data and databases, maps zoning, subdivisions, utilities and comprehensive plans, reviews legal descriptions and supports field verification. Municipal GIS experience and certification are desired.", source:"https://www.erieco.gov/DocumentCenter/View/22791/GIS-Technician", cat:["entry","gis"], quality:"reference"},
+      {j:"Erie", title:"Planner", date:"November 14, 2025", dateLabel:"Classification effective", salary:"Grade 13: $69,118–$90,544/year", edu:"Bachelor’s in planning, architecture, landscape architecture, urban design or related field; MURP desired", exp:"2 years of professional planning experience; combinations considered", summary:"Processes land-use applications, writes development-review analysis, prepares staff reports and presentations, works with applicants and contributes to long-range plans and affordable-housing projects. AICP is desired.", source:"https://www.erieco.gov/DocumentCenter/View/22783/Planner", cat:["planner"], quality:"reference"},
+      {j:"Erie", title:"Planner – Long Range", date:"June 9, 2022", dateLabel:"Classification effective", salary:"Grade 13: $69,118–$90,544/year", edu:"Bachelor’s in planning, landscape architecture, urban design or related field; MURP preferred", exp:"2 years of professional planning experience; combinations considered", summary:"Supports comprehensive planning, Unified Development Code and design-guideline work while also assisting affordable-housing and current-planning reviews. ArcGIS, Adobe and strong research and writing skills are explicitly named.", source:"https://www.erieco.gov/DocumentCenter/View/22782/Planner---Long-Range", cat:["planner","housing"], quality:"reference"},
+      {j:"Erie", title:"GIS Analyst I", date:"March 10, 2026", dateLabel:"Classification effective", salary:"Grade 13: $69,118–$90,544/year", edu:"Associate degree in GIS, geography, planning, civil engineering, computer science or related field, or a GIS certificate", exp:"2 years of municipal GIS and mapping experience; combinations considered", summary:"The step after GIS Technician, adding more complex spatial-data, addressing, asset-management and workflow responsibilities plus light training of newer staff.", source:"https://www.erieco.gov/DocumentCenter/View/22789/GIS-Analyst", cat:["gis"], quality:"reference"},
+      {j:"Erie", title:"Housing Management Analyst", date:"March 31, 2023", dateLabel:"Classification effective", salary:"Grade 16: $83,834–$117,368/year", edu:"Bachelor’s in public administration, urban planning, urban design or related field", exp:"3 years in local-government housing/community development or private housing development; additional education may substitute", summary:"Advances affordable and workforce housing through policy, partnerships, grants, HUD programs, private-activity bonds and state funding. This is an analyst/program role rather than a conventional current-planning job.", source:"https://www.erieco.gov/DocumentCenter/View/22758/Housing-Management-Analyst", cat:["housing"], quality:"reference"},
+      {j:"Erie", title:"Senior Planner", date:"November 14, 2025", dateLabel:"Classification effective", salary:"Grade 16: $83,834–$117,368/year", edu:"Bachelor’s in planning, architecture, landscape architecture, urban design or related field; MURP and AICP desired", exp:"5 years or more of professional planning experience; combinations considered", summary:"Leads complex development reviews and design work, prepares recommendations for public bodies, negotiates with applicants and contributes to long-range and affordable-housing projects.", source:"https://www.erieco.gov/DocumentCenter/View/22780/Senior-Planner", cat:["planner","leadership"], quality:"reference"},
+      {j:"Erie", title:"Senior Planner – Long Range", date:"June 9, 2022", dateLabel:"Classification effective", salary:"Grade 16: $83,834–$117,368/year", edu:"Bachelor’s in planning, landscape architecture, urban design or closely related field; MURP and AICP preferred", exp:"5 years of professional planning experience; combinations considered", summary:"Leads comprehensive plans, code and design-standard updates, neighborhood and redevelopment plans, policy research, public outreach, grants and interagency coordination.", source:"https://www.erieco.gov/DocumentCenter/View/22779/Senior-Planner---Long-Range", cat:["planner","leadership"], quality:"reference"},
+      {j:"Erie", title:"Senior Housing Planner", date:"January 1, 2025", dateLabel:"Classification effective", salary:"Grade 16: $83,834–$117,368/year", edu:"Bachelor’s in planning, architecture, landscape architecture, urban design or related field; MURP and AICP preferred", exp:"5 years of professional planning experience; combinations considered", summary:"Processes housing land-use applications, supports fast-track affordable-housing review and resolves development-review barriers while applying current-planning and urban-design expertise.", source:"https://www.erieco.gov/DocumentCenter/View/22759/Senior-Housing-Planner", cat:["planner","housing","leadership"], quality:"reference"},
+      {j:"Erie", title:"Senior Transportation Planner", date:"January 1, 2022", dateLabel:"Classification effective", salary:"Grade 16: $83,834–$117,368/year", edu:"Bachelor’s in urban, regional or transportation planning or related field; master’s and AICP desired", exp:"6 years of progressively responsible municipal or private-sector transportation planning; combinations considered", summary:"Coordinates multimodal and transit planning, development and capital-project review, regional work with RTD/CDOT/DRCOG, grants, TOD, TDM and long- and short-range transportation programs.", source:"https://www.erieco.gov/DocumentCenter/View/22822/Senior-Transportation-Planner", cat:["planner","leadership"], quality:"reference"},
+      {j:"Erie", title:"Principal Planner", date:"March 13, 2023", dateLabel:"Classification effective", salary:"Grade 19: $104,147–$145,806/year", edu:"Bachelor’s in planning, landscape architecture, urban design or closely related field; MURP and AICP preferred", exp:"8 years of progressively responsible professional planning; combinations considered", summary:"Directs current-planning work, supervises planning staff, supports complex development negotiations and ensures consistent development review, customer service and public-body recommendations.", source:"https://www.erieco.gov/DocumentCenter/View/22778/Principal-Planner", cat:["planner","leadership"], quality:"reference"},
+      {j:"Erie", title:"Planning Manager", date:"February 24, 2026", dateLabel:"Classification effective", salary:"Grade 20: $111,958–$156,741/year", edu:"Bachelor’s in urban planning, public/business administration, engineering, geography or related field; master’s and AICP desired", exp:"5 years of increasingly responsible community-development and leadership experience, including 2 years of management/supervision", summary:"Leads Erie’s Planning Division across current, strategic and comprehensive planning, development review, zoning, team management, budgets, regional coordination and Planning Commission support.", source:"https://www.erieco.gov/DocumentCenter/View/22784/Planning-Manager", cat:["planner","leadership"], quality:"reference"},
 
       {j:"Firestone", title:"Plans Examiner Manager", date:"Approximately September 15, 2026", salary:"$94,553–$132,374/year", edu:"Not retained in the saved summary", exp:"Not retained in the saved summary", summary:"Manages building-code plan-review staff. Included as a planning-adjacent municipal role, but excluded from Planner career-level averages because it is building-code management rather than land-use planning.", cat:["adjacent","leadership"], quality:"summary"},
 
@@ -981,12 +1021,13 @@
         return `<section class="municipality" data-name="${name.toLowerCase()}">
           <button class="municipality-trigger" type="button" aria-expanded="${index < 2 ? "true" : "false"}" aria-controls="municipality-${index}">
             <span class="municipality-name">${name}</span>
-            <span class="count">${jobs.length} ${jobs.length === 1 ? "posting" : "postings"}</span>
+            <span class="count">${jobs.length} ${jobs.length === 1 ? "record" : "records"}</span>
             <span class="chevron">+</span>
           </button>
           <div class="jobs ${index < 2 ? "open" : ""}" id="municipality-${index}">
+            ${jurisdictionNotes[name] ? `<div class="jurisdiction-note">${jurisdictionNotes[name]}</div>` : ""}
             ${jobs.map(job => `<article class="job" data-cats="${job.cat.join(" ")}" data-search="${[job.j,job.title,job.date,job.salary,job.edu,job.exp,job.summary].join(" ").toLowerCase().replaceAll('"','&quot;')}">
-              <div><h3>${job.title}</h3><div class="meta">Advertised: ${job.date}</div><div class="badges">${job.cat.map(categoryBadge).join("")}${qualityBadge(job.quality)}</div><p class="job-summary">${job.summary}</p></div>
+              <div><h3>${job.title}</h3><div class="meta">${job.dateLabel || "Advertised"}: ${job.date}</div><div class="badges">${job.cat.map(categoryBadge).join("")}${qualityBadge(job.quality)}</div><p class="job-summary">${job.summary}</p>${job.source ? `<a class="job-link" href="${job.source}" target="_blank" rel="noopener noreferrer">Official job description ↗</a>` : ""}</div>
               <div><div class="spec"><label>Salary</label><div>${job.salary}</div></div><div class="spec"><label>Education</label><div>${job.edu}</div></div></div>
               <div><div class="spec"><label>Experience</label><div>${job.exp}</div></div></div>
             </article>`).join("")}
@@ -1025,7 +1066,7 @@
           municipalityMatches += 1;
           if (term || activeFilter !== "all") toggleMunicipality(section.querySelector(".municipality-trigger"), true);
         }
-        section.querySelector(".count").textContent = `${visibleJobs} ${visibleJobs === 1 ? "posting" : "postings"}`;
+        section.querySelector(".count").textContent = `${visibleJobs} ${visibleJobs === 1 ? "record" : "records"}`;
       });
       document.getElementById("empty").style.display = municipalityMatches ? "none" : "block";
     }
